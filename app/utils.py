@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from datetime import datetime, timedelta
 
 import requests
@@ -20,7 +19,11 @@ def requests_retry_session(max_retries=5):
 
 def get_article_meta(url):
     sess = requests_retry_session()
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
+    headers = {
+        'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                       'AppleWebKit/537.36 (KHTML, like Gecko) '
+                       'Chrome/75.0.3770.142 Safari/537.36')
+    }
     req = sess.get(url, headers=headers)
     sess.close()
     bs_parsed = BeautifulSoup(req.text, features='lxml')
@@ -39,7 +42,9 @@ def get_raw_comments(gallery_id, article_no, e_s_n_o, max_page=10):
     request_url = 'https://gall.dcinside.com/board/comment/'
     headers = {
         'Origin': 'https://gall.dcinside.com',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
+        'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                       'AppleWebKit/537.36 (KHTML, like Gecko) '
+                       'Chrome/75.0.3770.142 Safari/537.36'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Accept-Encoding': 'gzip, deflate, br',

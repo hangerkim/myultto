@@ -1,5 +1,5 @@
 import dateutil.parser
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import random
 from flask import jsonify, render_template, request
