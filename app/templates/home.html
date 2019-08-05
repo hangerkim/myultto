@@ -6,17 +6,19 @@
     <title>Myultto</title>
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script type="text/javascript"  src="/static/bootstrap-tagsinput.js"></script>
+    <script type="text/javascript"  src="{{ url_for('static', filename='bootstrap-tagsinput.js') }}"></script>
   </head>
 
   <body>
     <div class="container">
       <div class="mb-3">
-        <h3>Myultto <small class="text-muted">멸붕로또</small></h3>
+        <a href="{{ url_for('home') }}" class="brand">
+          <h3>Myultto <small class="text-muted">멸붕로또</small></h3>
+        </a>
       </div>
 
       <div class="card mb-3">
@@ -98,7 +100,7 @@
       </div>
 
       <div class="text-center">
-        최근 결과 보기 / 만든이
+        <a href="{{ url_for('recent_results') }}">최근 결과 보기</a>
       </div>
     </div>
 
@@ -124,4 +126,4 @@
   </body>
 </html>
 
-<script type="text/javascript" src="/static/script.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>

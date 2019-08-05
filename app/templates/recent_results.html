@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Myultto</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="mb-3">
+        <a href="{{ url_for('home') }}" class="brand">
+          <h3>Myultto <small class="text-muted">멸붕로또</small></h3>
+        </a>
+      </div>
+
+      <h5>최근 결과</h5>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">시간</th>
+            <th scope="col">당첨자</th>
+            <th scope="col">후보</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+          <tr>
+            <th scope="row"><a href="{{ url_for('show_result', result_id=result['id']) }}">{{ result['created_at'] }}</a></th>
+            <td>{{ ', '.join(result['winners']) }}</td>
+            <td><span class="candidate-badge badge badge-warning" data-toggle="tooltip" data-placement="bottom" title="{{ ', '.join(result['candidates']) }}">?</span></td>
+          </tr>
+        {% endfor %}  
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+
+<script>
+  $('[data-toggle="tooltip"]').tooltip();
+</script>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Myultto</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="mb-3">
+        <a href="{{ url_for('home') }}" class="brand">
+          <h3>Myultto <small class="text-muted">멸붕로또</small></h3>
+        </a>
+      </div>
+
+      <div class="card">
+        <h5 class="card-header text-center">
+          당발
+        </h5>
+        <div class="card-body">
+          추첨 시간: {{ result['created_at'] }}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            당첨자
+          </h5>
+          <ul class="list-group">
+          {% for winner in result['winners'] %}
+            <li class="list-group-item list-group-item-success">{{ winner }}</li>
+          {% endfor %}
+          </ul>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            후보
+          </h5>
+          <ul class="list-group">
+          {% for candidate in result['candidates'] %}
+            <li class="list-group-item list-group-item-warning">{{ candidate }}</li>
+          {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,3 +1,12 @@
 .bootstrap-tagsinput {
   width: 100%;
 }
+
+a.brand {
+  text-decoration: none;
+  color: black;
+}
+
+.candidate-badge {
+  cursor: pointer;
+}

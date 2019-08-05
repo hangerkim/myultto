@@ -40,6 +40,21 @@ def draw_lottery():
     winners = shuffled_candidates[:num_winners]
 
     db = get_db()
-    utils.write_result_to_db(db=db, candidates=candidates, winners=winners)
+    result_id = utils.write_result_to_db(
+        db=db, candidates=candidates, winners=winners)
 
-    return jsonify({'winners': winners})
+    return jsonify({'winners': winners, 'result_id': result_id})
+
+
+@app.route('/recent_results', methods=['GET'])
+def recent_results():
+    db = get_db()
+    recent_results = utils.fetch_recent_results(db)
+    return render_template('recent_results.html', results=recent_results)
+
+
+@app.route('/result/<int:result_id>')
+def show_result(result_id):
+    db = get_db()
+    result = utils.fetch_result(db, result_id=result_id)
+    return render_template('show_result.html', result=result)

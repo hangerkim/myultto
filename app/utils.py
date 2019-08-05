@@ -130,5 +130,37 @@ def write_result_to_db(db, candidates, winners):
     winners_text = ','.join(winners)
     query = ('INSERT INTO results (created_at, candidates, winners) '
              'VALUES (?, ?, ?)')
-    db.execute(query, (kst_now_text, candidates_text, winners_text))
+    cur = db.execute(query, (kst_now_text, candidates_text, winners_text))
+    result_id = cur.lastrowid
     db.commit()
+    return result_id
+
+
+def fetch_recent_results(db, count=50):
+    query = ('SELECT id, created_at, candidates, winners '
+             'FROM results '
+             'ORDER BY id DESC '
+             'LIMIT ?')
+    cur = db.execute(query, (count,))
+    rows = cur.fetchall()
+    recent_results = []
+    for row in rows:
+        recent_results.append({
+            'id': row[0],
+            'created_at': row[1],
+            'candidates': row[2].split(','),
+            'winners': row[3].split(',')
+        })
+    return recent_results
+
+
+def fetch_result(db, result_id):
+    query = ('SELECT id, created_at, candidates, winners '
+             'FROM results '
+             'WHERE id = ?')
+    cur = db.execute(query, (result_id,))
+    row = cur.fetchone()
+    return {'id': row[0],
+            'created_at': row[1],
+            'candidates': row[2].split(','),
+            'winners': row[3].split(',')}
