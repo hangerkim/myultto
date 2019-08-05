@@ -1,9 +1,10 @@
+import dateutil.parser
 from datetime import datetime, timedelta
 
 import random
 from flask import jsonify, render_template, request
 
-from app import app, utils
+from app import app, get_db, utils
 
 
 @app.route('/')
@@ -18,8 +19,7 @@ def extract_candidates():
     allow_guest = json_data['allow_guest']
 
     # UTC
-    time_limit = datetime.strptime(
-        json_data['time_limit'], '%Y-%m-%dT%H:%M:%S.%f%z')
+    time_limit = dateutil.parser.parse(json_data['time_limit'])
     # Convert to KST
     time_limit = time_limit + timedelta(hours=9)
 
@@ -34,6 +34,12 @@ def draw_lottery():
     json_data = request.get_json()
     num_winners = json_data['num_winners']
     candidates = json_data['candidates']
-    random.shuffle(candidates)
-    winners = candidates[:num_winners]
+
+    shuffled_candidates = candidates.copy()
+    random.shuffle(shuffled_candidates)
+    winners = shuffled_candidates[:num_winners]
+
+    db = get_db()
+    utils.write_result_to_db(db=db, candidates=candidates, winners=winners)
+
     return jsonify({'winners': winners})

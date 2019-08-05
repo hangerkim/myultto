@@ -1,2 +1,3 @@
 *.pid
 *.py[cod]
+*.db

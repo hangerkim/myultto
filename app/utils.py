@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -121,3 +121,14 @@ def get_candidates_from_article(article_url, allow_guest, time_limit):
         raw_comments=raw_comments, allow_guest=allow_guest,
         time_limit=time_limit, article_date=article_date)
     return candidates
+
+
+def write_result_to_db(db, candidates, winners):
+    kst_now = datetime.utcnow() + timedelta(hours=9)
+    kst_now_text = kst_now.strftime('%Y-%m-%d %H:%M:%S')
+    candidates_text = ','.join(candidates)
+    winners_text = ','.join(winners)
+    query = ('INSERT INTO results (created_at, candidates, winners) '
+             'VALUES (?, ?, ?)')
+    db.execute(query, (kst_now_text, candidates_text, winners_text))
+    db.commit()
