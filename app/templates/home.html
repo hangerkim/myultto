@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Myultto</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script type="text/javascript"  src="/static/bootstrap-tagsinput.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="mb-3">
+        <h3>Myultto <small class="text-muted">멸붕로또</small></h3>
+      </div>
+
+      <div class="card mb-3">
+        <h5 class="card-header text-center">
+          &#8544;. 명단 작성
+        </h5>
+        <div class="card-body">
+          <h5 class="card-title">
+            자동으로 가져오기
+          </h5>
+          <form id="extractForm" method="post" action="{{ url_for('extract_candidates') }}">
+            <div class="form-row align-items-center mb-2">
+              <div class="col-lg-2">
+                <label for="dcArticleUrl">글 주소</label>
+              </div>
+              <div class="col-lg-10">
+                <input type="text" class="form-control" id="dcArticleUrl" placeholder="e.g. https://gall.dcinside.com/mgallery/board/view/?id=japtrainee&no=...">
+              </div>
+            </div>
+            <div class="form-row align-items-center">
+              <div class="col-lg-2">
+                <label for="timeLimit">시간 제한</label>
+              </div>
+              <div class="col-lg-4">
+                <input type="datetime-local" class="form-control" id="timeLimit">
+              </div>
+              <div class="col-lg-2"></div>
+              <div class="col-lg-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="allowGuest">
+                  <label class="form-check-label" for="allowGuest">
+                    유동 포함
+                  </label>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <button type="submit" class="btn btn-primary">가져오기</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            명단
+          </h5>
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="candList" data-role="tagsinput">
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <h5 class="card-header text-center">
+          &#8545;. 추첨
+        </h5>
+        <div class="card-body">
+          <h5 class="card-title">
+            설정
+          </h5>
+          <form id="drawForm" method="post" action="{{ url_for('draw_lottery') }}">
+            <div class="form-row align-items-center mb-3">
+              <div class="col-lg-2">
+                <label for="numWinners">당첨자 수</label>
+              </div>
+              <div class="col-lg-3">
+                <input type="number" class="form-control" id="numWinners" value="1">
+              </div>
+            </div>
+            <div class="form-row align-items-center">
+              <input type="submit" class="btn btn-success col-lg-12" value="추첨">
+            </div>
+            <div class="text-center">
+              <small class="text-muted">추첨 결과는 누구나 확인할 수 있음. 주작 ㄴㄴ</small>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-center">
+        최근 결과 보기 / 만든이
+      </div>
+    </div>
+
+    <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="resultModalLabel">결과</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul id="winnersList" class="list-group">
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript" src="/static/script.js"></script>
