@@ -1,10 +1,11 @@
+import os
 import sqlite3
 
 from flask import Flask, g
 
 app = Flask(__name__)
 
-DATABASE = 'myultto.db'
+DATABASE = os.path.join(app.instance_path, 'myultto.db')
 
 
 def get_db():
