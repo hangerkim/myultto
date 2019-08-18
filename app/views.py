@@ -3,7 +3,7 @@ import time
 
 import dateutil.parser
 from datetime import timedelta
-from flask import jsonify, render_template, request
+from flask import jsonify, render_template, request, url_for
 
 from app import app, get_db, utils
 
@@ -45,8 +45,10 @@ def draw_lottery():
     db = get_db()
     result_id = utils.write_result_to_db(
         db=db, candidates=candidates, winners=winners, seed=seed)
+    result_url = url_for('show_result', result_id=result_id)
 
-    return jsonify({'winners': winners, 'result_id': result_id})
+    return jsonify({'winners': winners, 'result_id': result_id,
+                    'result_url': result_url})
 
 
 @app.route('/recent_results', methods=['GET'])

@@ -82,6 +82,10 @@ $('#drawForm').submit(function(e) {
         });
         winnerList.append(winnerElem);
       });
+      var resultLinkElem = $('#resultLink');
+      var resultUrl = window.location.origin + r['result_url'];
+      resultLinkElem.attr('href', resultUrl);
+      resultLinkElem.text(resultUrl);
       $('#resultModal').modal();
     },
     error: function(r) {
