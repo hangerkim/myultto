@@ -24,6 +24,7 @@ def get_article_meta(url):
                        'AppleWebKit/537.36 (KHTML, like Gecko) '
                        'Chrome/75.0.3770.142 Safari/537.36')
     }
+    url = url.replace('http://', 'https://')
     req = sess.get(url, headers=headers)
     sess.close()
     bs_parsed = BeautifulSoup(req.text, features='lxml')
@@ -128,21 +129,22 @@ def get_candidates_from_article(article_url, allow_guest, time_limit):
     return candidates
 
 
-def write_result_to_db(db, candidates, winners):
+def write_result_to_db(db, candidates, winners, seed):
     kst_now = datetime.utcnow() + timedelta(hours=9)
     kst_now_text = kst_now.strftime('%Y-%m-%d %H:%M:%S')
     candidates_text = ','.join(candidates)
     winners_text = ','.join(winners)
-    query = ('INSERT INTO results (created_at, candidates, winners) '
-             'VALUES (?, ?, ?)')
-    cur = db.execute(query, (kst_now_text, candidates_text, winners_text))
+    query = ('INSERT INTO results (created_at, candidates, winners, seed) '
+             'VALUES (?, ?, ?, ?)')
+    cur = db.execute(
+        query, (kst_now_text, candidates_text, winners_text, seed))
     result_id = cur.lastrowid
     db.commit()
     return result_id
 
 
 def fetch_recent_results(db, count=50):
-    query = ('SELECT id, created_at, candidates, winners '
+    query = ('SELECT id, created_at, candidates, winners, seed '
              'FROM results '
              'ORDER BY id DESC '
              'LIMIT ?')
@@ -154,13 +156,14 @@ def fetch_recent_results(db, count=50):
             'id': row[0],
             'created_at': row[1],
             'candidates': row[2].split(','),
-            'winners': row[3].split(',')
+            'winners': row[3].split(','),
+            'seed': row[4]
         })
     return recent_results
 
 
 def fetch_result(db, result_id):
-    query = ('SELECT id, created_at, candidates, winners '
+    query = ('SELECT id, created_at, candidates, winners, seed '
              'FROM results '
              'WHERE id = ?')
     cur = db.execute(query, (result_id,))
@@ -168,4 +171,5 @@ def fetch_result(db, result_id):
     return {'id': row[0],
             'created_at': row[1],
             'candidates': row[2].split(','),
-            'winners': row[3].split(',')}
+            'winners': row[3].split(','),
+            'seed': row[4]}

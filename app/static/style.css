@@ -7,6 +7,10 @@ a.brand {
   color: black;
 }
 
-.candidate-badge {
+.badge {
   cursor: pointer;
+}
+
+.tooltip-inner {
+  max-width: none;
 }

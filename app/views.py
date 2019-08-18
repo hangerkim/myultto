@@ -1,7 +1,8 @@
+import random
+import time
+
 import dateutil.parser
 from datetime import timedelta
-
-import random
 from flask import jsonify, render_template, request
 
 from app import app, get_db, utils
@@ -34,14 +35,16 @@ def draw_lottery():
     json_data = request.get_json()
     num_winners = json_data['num_winners']
     candidates = json_data['candidates']
+    seed = int(time.time() * 1000)
 
     shuffled_candidates = candidates.copy()
+    random.seed(seed)
     random.shuffle(shuffled_candidates)
     winners = shuffled_candidates[:num_winners]
 
     db = get_db()
     result_id = utils.write_result_to_db(
-        db=db, candidates=candidates, winners=winners)
+        db=db, candidates=candidates, winners=winners, seed=seed)
 
     return jsonify({'winners': winners, 'result_id': result_id})
 

@@ -50,7 +50,11 @@ $('#drawForm').submit(function(e) {
     return false;
   }
 
-  var candidates = $('#candList').val().split(',');
+  var candListStr = $.trim($('#candList').val());
+  if (candListStr.length == 0) {
+    return false;
+  }
+  var candidates = candListStr.split(',');
 
   var requestData = {
     num_winners: numWinners,
