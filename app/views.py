@@ -23,6 +23,8 @@ def extract_candidates():
     time_limit = dateutil.parser.parse(json_data['time_limit'])
     # Convert to KST
     time_limit = time_limit + timedelta(hours=9)
+    # Remove timezone info
+    time_limit = time_limit.replace(tzinfo=None)
 
     candidates = utils.get_candidates_from_article(
         article_url=article_url, allow_guest=allow_guest,

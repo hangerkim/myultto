@@ -97,8 +97,7 @@ def parse_comment_date(article_date, comment_date_str):
 def build_candidates(raw_comments, allow_guest, time_limit, article_date):
     candidates = set()
     # Make time_limit inclusive by extending it by 1 minute.
-    time_limit = datetime(time_limit.year, time_limit.month, time_limit.day,
-                          time_limit.hour, time_limit.minute + 1, 0)
+    time_limit = time_limit + timedelta(minutes=1)
     for comment in raw_comments:
         if comment.get('ip'):
             if not allow_guest:
