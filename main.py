@@ -1,7 +1,8 @@
-import os
+from app import create_app
+from app.models import db
 
-from app import app, models
+app = create_app()
 
 
 with app.app_context():
-    models.db.create_all()
+    db.create_all()

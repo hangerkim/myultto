@@ -15,7 +15,7 @@
   <body>
     <div class="container">
       <div class="mb-3">
-        <a href="{{ url_for('home') }}" class="brand">
+        <a href="{{ url_for('views.home') }}" class="brand">
           <h3>Myultto <small class="text-muted">멸붕로또</small></h3>
         </a>
       </div>
@@ -33,7 +33,7 @@
         <tbody>
         {% for result in results %}
           <tr>
-            <th scope="row"><a href="{{ url_for('show_result', result_id=result.id) }}">{{ result.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</a></th>
+            <th scope="row"><a href="{{ url_for('views.show_result', result_id=result.id) }}">{{ result.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</a></th>
             <td>{{ result.winners | join_candidates | safe }}</td>
             <td><span class="badge badge-warning" data-toggle="tooltip" data-placement="bottom" title="{{ result.candidates | join_candidates | safe }}">?</span></td>
             <td>{{ result.seed }}</td>

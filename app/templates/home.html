@@ -16,7 +16,7 @@
   <body>
     <div class="container">
       <div class="mb-3">
-        <a href="{{ url_for('home') }}" class="brand">
+        <a href="{{ url_for('views.home') }}" class="brand">
           <h3>Myultto <small class="text-muted">멸붕로또</small></h3>
         </a>
       </div>
@@ -29,7 +29,7 @@
           <h5 class="card-title">
             자동으로 가져오기
           </h5>
-          <form id="extractForm" method="post" action="{{ url_for('extract_candidates') }}">
+          <form id="extractForm" method="post" action="{{ url_for('views.extract_candidates') }}">
             <div class="form-row align-items-center mb-2">
               <div class="col-lg-2">
                 <label for="dcArticleUrl">글 주소</label>
@@ -80,7 +80,7 @@
           <h5 class="card-title">
             설정
           </h5>
-          <form id="drawForm" method="post" action="{{ url_for('draw_lottery') }}">
+          <form id="drawForm" method="post" action="{{ url_for('views.draw_lottery') }}">
             <div class="form-row align-items-center mb-3">
               <div class="col-lg-2">
                 <label for="numWinners">당첨자 수</label>
@@ -100,7 +100,7 @@
       </div>
 
       <div class="text-center">
-        <a href="{{ url_for('recent_results') }}">최근 결과 보기</a>
+        <a href="{{ url_for('views.recent_results') }}">최근 결과 보기</a>
       </div>
       <div class="text-center mt-3">
         <a href="https://github.com/hangerkim/myultto"><img src="https://simpleicons.org/icons/github.svg" width="24" height="24" alt="Link to the GitHub repository"></a>

@@ -16,7 +16,9 @@ class Result(db.Model):
 
     @hybrid_property
     def winners(self):
-        return Candidate.query.with_parent(self).filter_by(is_winner=True).all()
+        return (Candidate.query.with_parent(self)
+                .filter_by(is_winner=True)
+                .all())
 
 
 class Candidate(db.Model):
