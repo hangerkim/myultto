@@ -1,7 +1,7 @@
 import os
 
-from app import app, DATABASE, init_db
+from app import app, models
 
 
-if not os.path.exists(DATABASE):
-    init_db()
+with app.app_context():
+    models.db.create_all()

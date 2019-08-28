@@ -33,12 +33,12 @@
         <tbody>
         {% for result in results %}
           <tr>
-            <th scope="row"><a href="{{ url_for('show_result', result_id=result['id']) }}">{{ result['created_at'] }}</a></th>
-            <td>{{ ', '.join(result['winners']) }}</td>
-            <td><span class="badge badge-warning" data-toggle="tooltip" data-placement="bottom" title="{{ ', '.join(result['candidates']) }}">?</span></td>
-            <td>{{ result['seed'] }}</td>
+            <th scope="row"><a href="{{ url_for('show_result', result_id=result.id) }}">{{ result.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</a></th>
+            <td>{{ result.winners | join_candidates | safe }}</td>
+            <td><span class="badge badge-warning" data-toggle="tooltip" data-placement="bottom" title="{{ result.candidates | join_candidates | safe }}">?</span></td>
+            <td>{{ result.seed }}</td>
           </tr>
-        {% endfor %}  
+        {% endfor %}
         </tbody>
       </table>
     </div>

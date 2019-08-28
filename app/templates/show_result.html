@@ -22,15 +22,15 @@
           당발
         </h5>
         <div class="card-body">
-          추첨 시간: {{ result['created_at'] }}
+          추첨 시간: {{ result.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
         </div>
         <div class="card-body">
           <h5 class="card-title">
             당첨자
           </h5>
           <ul class="list-group">
-          {% for winner in result['winners'] %}
-            <li class="list-group-item list-group-item-success">{{ winner }}</li>
+          {% for winner in result.winners %}
+            <li class="list-group-item list-group-item-success">{{ winner.name }}</li>
           {% endfor %}
           </ul>
         </div>
@@ -39,8 +39,8 @@
             후보
           </h5>
           <ul class="list-group">
-          {% for candidate in result['candidates'] %}
-            <li class="list-group-item list-group-item-warning">{{ candidate }}</li>
+          {% for candidate in result.candidates %}
+            <li class="list-group-item list-group-item-warning">{{ candidate.name }}</li>
           {% endfor %}
           </ul>
         </div>
@@ -48,7 +48,7 @@
           <h5 class="card-title">
             랜덤 시드
           </h5>
-          {{ result['seed'] }}
+          {{ result.seed }}
         </div>
       </div>
       <div class="text-center mt-2 mb-2">

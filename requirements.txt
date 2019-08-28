@@ -1,4 +1,5 @@
 Flask==1.0.2
+Flask-SQLAlchemy
 requests
 beautifulsoup4
 python-dateutil

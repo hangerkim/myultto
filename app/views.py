@@ -5,7 +5,8 @@ import dateutil.parser
 from datetime import timedelta
 from flask import jsonify, render_template, request, url_for
 
-from app import app, get_db, utils
+from app import app, utils
+from app.models import db, Candidate, Result
 
 
 @app.route('/')
@@ -36,32 +37,35 @@ def extract_candidates():
 def draw_lottery():
     json_data = request.get_json()
     num_winners = json_data['num_winners']
-    candidates = json_data['candidates']
+    cand_names = json_data['candidates']
     seed = int(time.time() * 1000)
 
-    shuffled_candidates = candidates.copy()
+    result = Result(seed=seed)
+    candidates = [Candidate(name=name, result=result) for name in cand_names]
+
     random.seed(seed)
-    random.shuffle(shuffled_candidates)
-    winners = shuffled_candidates[:num_winners]
+    winner_indices = random.sample(range(len(cand_names)), num_winners)
+    winners = [candidates[i] for i in winner_indices]
+    for winner in winners:
+        winner.is_winner = True
 
-    db = get_db()
-    result_id = utils.write_result_to_db(
-        db=db, candidates=candidates, winners=winners, seed=seed)
-    result_url = url_for('show_result', result_id=result_id)
+    db.session.add(result)
+    db.session.commit()
 
-    return jsonify({'winners': winners, 'result_id': result_id,
+    winner_names = [winner.name for winner in winners]
+
+    result_url = url_for('show_result', result_id=result.id)
+    return jsonify({'winners': winner_names, 'result_id': result.id,
                     'result_url': result_url})
 
 
 @app.route('/recent_results', methods=['GET'])
 def recent_results():
-    db = get_db()
-    recent_results = utils.fetch_recent_results(db)
+    recent_results = Result.query.order_by(Result.id.desc()).limit(50).all()
     return render_template('recent_results.html', results=recent_results)
 
 
 @app.route('/result/<int:result_id>')
 def show_result(result_id):
-    db = get_db()
-    result = utils.fetch_result(db, result_id=result_id)
+    result = Result.query.get(result_id)
     return render_template('show_result.html', result=result)
