@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_migrate import Migrate
 
 
 def create_app(test_config=None):
@@ -21,6 +22,8 @@ def create_app(test_config=None):
 
     from app import filters, views
     from app.models import db
+
+    migrate = Migrate(app, db)
 
     app.register_blueprint(filters.bp)
     app.register_blueprint(views.bp)
