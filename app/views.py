@@ -1,8 +1,9 @@
+import os
 import random
 import time
 
 import dateutil.parser
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Blueprint, jsonify, render_template, request, url_for
 
 from app import utils
@@ -39,10 +40,15 @@ def extract_candidates():
 def draw_lottery():
     json_data = request.get_json()
     num_winners = json_data['num_winners']
+    announcement_delay = json_data['announcement_delay']
     cand_names = json_data['candidates']
-    seed = int(time.time() * 1000)
 
-    result = Result(seed=seed)
+    created_at = datetime.now(timezone(timedelta(hours=9)))
+    created_at = created_at.replace(tzinfo=None)
+    published_at = created_at + timedelta(minutes=announcement_delay)
+    seed = int(created_at.timestamp() * 1000)
+    result = Result(created_at=created_at, published_at=published_at,
+                    seed=seed)
     candidates = [Candidate(name=name, result=result) for name in cand_names]
 
     random.seed(seed)

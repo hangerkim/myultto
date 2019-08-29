@@ -28,11 +28,15 @@
           <h5 class="card-title">
             당첨자
           </h5>
-          <ul class="list-group">
-          {% for winner in result.winners %}
-            <li class="list-group-item list-group-item-success">{{ winner.name }}</li>
-          {% endfor %}
-          </ul>
+          {% if result | is_published %}
+            <ul class="list-group">
+            {% for winner in result.winners %}
+              <li class="list-group-item list-group-item-success">{{ winner.name }}</li>
+            {% endfor %}
+            </ul>
+          {% else %}
+            {{ result.published_at.strftime('%Y-%m-%d %H:%M:%S') }}에 공개됩니다.
+          {% endif %}
         </div>
         <div class="card-body">
           <h5 class="card-title">
@@ -48,7 +52,11 @@
           <h5 class="card-title">
             랜덤 시드
           </h5>
-          {{ result.seed }}
+          {% if result | is_published %}
+            {{ result.seed }}
+          {% else %}
+            {{ result.published_at.strftime('%Y-%m-%d %H:%M:%S') }}에 공개됩니다.
+          {% endif %}
         </div>
       </div>
       <div class="text-center mt-2 mb-2">

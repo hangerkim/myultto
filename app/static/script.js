@@ -18,7 +18,7 @@ $('#extractForm').submit(function(e) {
   if (dcArticleUrl.length == 0) {
     return false;
   }
-  
+
   $.ajax({
     url: submitUrl,
     data: JSON.stringify(requestData),
@@ -50,6 +50,14 @@ $('#drawForm').submit(function(e) {
     return false;
   }
 
+  var announcementDelayStr = $.trim($('#announcementDelay').val());
+  var announcementDelay;
+  if (announcementDelayStr.length > 0) {
+    announcementDelay = parseInt(announcementDelayStr);
+  } else {
+    return false;
+  }
+
   var candListStr = $.trim($('#candList').val());
   if (candListStr.length == 0) {
     return false;
@@ -58,13 +66,14 @@ $('#drawForm').submit(function(e) {
 
   var requestData = {
     num_winners: numWinners,
+    announcement_delay: announcementDelay,
     candidates: candidates
   };
 
   if (dcArticleUrl.length == 0) {
     return false;
   }
-  
+
   $.ajax({
     url: submitUrl,
     data: JSON.stringify(requestData),
