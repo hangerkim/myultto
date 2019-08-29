@@ -12,7 +12,7 @@ class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     candidates = db.relationship('Candidate', backref='result', lazy=False)
-    seed = db.Column(db.Integer, nullable=False)
+    seed = db.Column(db.BigInteger, nullable=False)
 
     @hybrid_property
     def winners(self):

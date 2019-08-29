@@ -4,3 +4,4 @@ Flask-Migrate
 requests
 beautifulsoup4
 python-dateutil
+mysqlclient

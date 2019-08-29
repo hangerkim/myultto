@@ -5,15 +5,13 @@ from flask_migrate import Migrate
 
 
 def create_app(test_config=None):
-    app = Flask(__name__)
-    db_path = os.path.join(app.instance_path, 'myultto.db')
-    db_uri = f'sqlite:///{db_path}'
-    app.config.from_mapping(SQLALCHEMY_DATABASE_URI=db_uri)
+    app = Flask(__name__, instance_relative_config=True)
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
     else:
         app.config.from_mapping(test_config)
+    app.config.from_envvar('SQLALCHEMY_DATABASE_URI', silent=True)
 
     try:
         os.makedirs(app.instance_path)
