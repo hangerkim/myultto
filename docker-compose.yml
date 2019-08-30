@@ -1,0 +1,27 @@
+version: "3"
+services:
+  app:
+    build: .
+    container_name: myultto
+    links:
+      - db
+    ports:
+      - "80:80"
+    networks:
+      - default
+    environment:
+      SQLALCHEMY_DATABASE_URI: "mysql://root@db:3306/myultto"
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    networks:
+      - default
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "myultto"
+    volumes:
+      - "./db_data:/var/lib/mysql"
+      - "./db_conf:/etc/mysql/conf.d:ro"
+
+networks:
+  default:

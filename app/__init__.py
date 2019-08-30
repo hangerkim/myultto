@@ -11,7 +11,9 @@ def create_app(test_config=None):
         app.config.from_pyfile('config.py', silent=True)
     else:
         app.config.from_mapping(test_config)
-    app.config.from_envvar('SQLALCHEMY_DATABASE_URI', silent=True)
+    db_uri_from_envvar = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    if db_uri_from_envvar:
+        app.config['SQLALCHEMY_DATABASE_URI'] = db_uri_from_envvar
 
     try:
         os.makedirs(app.instance_path)
