@@ -1,16 +1,8 @@
 # Myultto
 
-## Preparation
-1. Build a docker image
+## How to Run
+1. Edit `docker-compose.yml` and `db_conf/my.cnf`, if necessary
+1. Run
     ```
-    docker build -t myultto:latest .
+    docker-compose up
     ```
-1. Creeate a container
-    ```
-    docker create --name myultto -p [PORT]:80 -v [MOUNT DIRECTORY]:/app/instance myultto:latest
-    ```
-
-## Run
-```
-docker start myultto
-```
