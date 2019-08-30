@@ -1,3 +1,4 @@
 *.pid
 *.py[cod]
+*.swp
 db_data/
