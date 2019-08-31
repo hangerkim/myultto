@@ -11,6 +11,7 @@ services:
     environment:
       SQLALCHEMY_DATABASE_URI: "mysql://root@db:3306/myultto"
     volumes:
+      - "./instance:/app/instance"
       - "./certbot_data/conf:/etc/letsencrypt:ro"
       - "./certbot_data/www:/var/www/certbot:ro"
   db:
