@@ -2,18 +2,20 @@ version: "3"
 services:
   app:
     build: .
-    container_name: myultto
-    links:
-      - db
+    container_name: myultto_app
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - default
     environment:
       SQLALCHEMY_DATABASE_URI: "mysql://root@db:3306/myultto"
+    volumes:
+      - "./certbot_data/conf:/etc/letsencrypt:ro"
+      - "./certbot_data/www:/var/www/certbot:ro"
   db:
     image: mysql:5.7
-    container_name: mysql
+    container_name: myultto_mysql
     networks:
       - default
     environment:
@@ -21,7 +23,14 @@ services:
       MYSQL_DATABASE: "myultto"
     volumes:
       - "./db_data:/var/lib/mysql"
-      - "./db_conf:/etc/mysql/conf.d:ro"
+      - "./conf/mysql:/etc/mysql/conf.d:ro"
+  certbot:
+    image: certbot/certbot
+    container_name: myultto_certbot
+    volumes:
+      - "./certbot_data/conf:/etc/letsencrypt"
+      - "./certbot_data/www:/var/www/certbot"
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   default:

@@ -2,3 +2,4 @@
 *.py[cod]
 *.swp
 db_data/
+certbot_data/
