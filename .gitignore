@@ -1,5 +1,6 @@
 *.pid
 *.py[cod]
 *.swp
+*.db
 db_data/
 certbot_data/
