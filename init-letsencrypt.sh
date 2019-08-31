@@ -8,7 +8,7 @@ fi
 domains=(mbtt.me www.mbtt.me)
 rsa_key_size=4096
 data_path="./certbot_data/"
-staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
+staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 read -p "Enter your email: " email
 
