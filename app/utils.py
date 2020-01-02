@@ -72,23 +72,18 @@ def get_raw_comments(gallery_id, article_no, e_s_n_o, max_page=10):
     return comments
 
 
-def parse_comment_date(article_date, comment_date_str):
-    # The date (and time) in the comment data does not contain
-    # year information. In most cases, it should just be fine by setting
-    # it to the same value as the article's (say 2019), however
-    # there always exist special cases, so for the completion
-    # it predicts the correct year in a heuristic and dirty way.
-    comment_month = int(comment_date_str[:2])
-    comment_day = int(comment_date_str[3:5])
-    comment_hour = int(comment_date_str[6:8])
-    comment_minute = int(comment_date_str[9:11])
-    comment_second = int(comment_date_str[12:14])
-    if comment_month >= article_date.month:
-        # Both are in the same year.
-        comment_year = article_date.year
-    else:
-        # A year has passed.
-        comment_year = article_date.year + 1
+def parse_comment_date(comment_date_str):
+    if len(comment_date_str) == 14:  # A comment written in the current year
+        comment_date_str = str(datetime.now().year) + '.' + comment_date_str
+    assert len(comment_date_str) == 19, (
+        'Invalid comment date: {}'.format(comment_date_str)
+    )
+    comment_year = int(comment_date_str[:4])
+    comment_month = int(comment_date_str[5:7])
+    comment_day = int(comment_date_str[8:10])
+    comment_hour = int(comment_date_str[11:13])
+    comment_minute = int(comment_date_str[14:16])
+    comment_second = int(comment_date_str[17:19])
     comment_date = datetime(comment_year, comment_month, comment_day,
                             comment_hour, comment_minute, comment_second)
     return comment_date
@@ -107,8 +102,8 @@ def build_candidates(raw_comments, allow_guest, time_limit, article_date):
             candidate = f'{comment["name"]} ({comment["user_id"][:4]})'
         else:
             continue
-        comment_date = parse_comment_date(
-            article_date=article_date, comment_date_str=comment['reg_date'])
+        comment_date_str = comment['reg_date']
+        comment_date = parse_comment_date(comment_date_str)
         if time_limit < comment_date:
             continue
         # Make sure that there's no illegal character (comma for now)
