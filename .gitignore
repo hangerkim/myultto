@@ -1,6 +1,7 @@
 *.pid
 *.py[cod]
 *.swp
+.envrc
 db_data/
 certbot_data/
 app/templates/ad.html
