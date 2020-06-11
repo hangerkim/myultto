@@ -31,7 +31,35 @@
           {% if result | is_published %}
             <ul class="list-group">
             {% for winner in result.winners %}
-              <li class="list-group-item list-group-item-success">{{ winner.name }}</li>
+              <li class="list-group-item">
+                {{ winner.name }}
+                <div class="unfair">
+                  <table class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">기간</th>
+                        <th scope="col">참여</th>
+                        <th scope="col">당첨</th>
+                        <th scope="col">적폐도</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">최근 7일</th>
+                        <td>{{ unfair[winner.name]['week']['num_tries'] }}</td>
+                        <td>{{ unfair[winner.name]['week']['num_wins'] }}</td>
+                        <td>{{ '%.4f' | format(unfair[winner.name]['week']['unfair_score']) }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">최근 30일</th>
+                        <td>{{ unfair[winner.name]['month']['num_tries'] }}</td>
+                        <td>{{ unfair[winner.name]['month']['num_wins'] }}</td>
+                        <td>{{ '%.4f' | format(unfair[winner.name]['month']['unfair_score']) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
             {% endfor %}
             </ul>
           {% else %}
@@ -44,7 +72,7 @@
           </h5>
           <ul class="list-group">
           {% for candidate in result.candidates %}
-            <li class="list-group-item list-group-item-warning">{{ candidate.name }}</li>
+            <li class="list-group-item">{{ candidate.name }}</li>
           {% endfor %}
           </ul>
         </div>

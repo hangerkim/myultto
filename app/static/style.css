@@ -14,3 +14,10 @@ a.brand {
 .tooltip-inner {
   max-width: none;
 }
+
+.unfair {
+  font-size: 75%;
+}
+.unfair table {
+  margin-bottom: 0;
+}

@@ -38,6 +38,11 @@ $('#extractForm').submit(function(e) {
   });
 });
 
+var resultModalTemplate = Handlebars.compile($('#resultModalTemplate').html());
+Handlebars.registerHelper('toFixed', function(value, digits) {
+      return value.toFixed(digits);
+});
+
 // Handle request for drawing a lottery
 $('#drawForm').submit(function(e) {
   e.preventDefault();
@@ -84,21 +89,20 @@ $('#drawForm').submit(function(e) {
       var winnerList = $('#winnersList');
       winnerList.html('');
       var winners = r['winners'];
-      $.each(winners, function(index, item) {
-        var winnerElem = $('<li/>', {
-          'class': 'list-group-item',
-          text: item
-        });
-        winnerList.append(winnerElem);
-      });
-      var resultLinkElem = $('#resultLink');
       var resultUrl = window.location.origin + r['result_url'];
-      resultLinkElem.attr('href', resultUrl);
-      resultLinkElem.text(resultUrl);
+      var html = resultModalTemplate({
+        winners: winners,
+        result_url: resultUrl
+      });
+      $('#resultModal').html(html);
       $('#resultModal').modal();
     },
     error: function(r) {
       console.log(r);
     }
   });
+});
+
+$('.checkbox-hide-statistics').change(function() {
+  console.log('foo');
 });

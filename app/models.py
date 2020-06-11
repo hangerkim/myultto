@@ -28,6 +28,6 @@ class Candidate(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     is_winner = db.Column(db.Boolean, nullable=False, default=False)
-    name = db.Column(db.String(128), nullable=False, index=True)
+    name = db.Column(db.String(128), nullable=False)
     result_id = db.Column(db.Integer, db.ForeignKey('result.id'),
                           nullable=False)

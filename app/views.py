@@ -5,6 +5,7 @@ import time
 import dateutil.parser
 from datetime import datetime, timedelta, timezone
 from flask import Blueprint, jsonify, render_template, request, url_for
+from sqlalchemy import and_
 
 from app import utils
 from app.models import db, Candidate, Result
@@ -24,6 +25,30 @@ def dated_url_for(endpoint, **values):
             path = os.path.join(bp.root_path, endpoint, filename)
             values['ts'] = int(os.stat(path).st_mtime)
     return url_for(endpoint, **values)
+
+
+def calculate_unfair_score(name, days):
+    datetime_threshold = datetime.now() - timedelta(days=days)
+    result_candidates = (
+        db.session.query(Result, Candidate)
+        .join(Candidate)
+        .filter(Candidate.name == name)
+        .filter(Result.created_at > datetime_threshold)
+        .all()
+    )
+
+    num_tries = len(result_candidates)
+    num_wins = 0
+
+    score_sum = 0
+    for result, candidate in result_candidates:
+        if candidate.is_winner:
+            score_sum += len(result.candidates)
+            num_wins += 1
+
+    unfair_score = score_sum / num_tries
+
+    return num_tries, num_wins, unfair_score
 
 
 @bp.route('/')
@@ -74,10 +99,25 @@ def draw_lottery():
     db.session.add(result)
     db.session.commit()
 
-    winner_names = [winner.name for winner in winners]
+    winner_dicts = []
+    for winner in winners:
+        winner_dict = {}
+        winner_dict['name'] = winner.name
+        unfair_stats_week = calculate_unfair_score(name=winner.name, days=7)
+        unfair_stats_month = calculate_unfair_score(name=winner.name, days=30)
+        winner_dict['unfair'] = {
+            'week': {'num_tries': unfair_stats_week[0],
+                     'num_wins': unfair_stats_week[1],
+                     'unfair_score': unfair_stats_week[2]},
+            'month': {'num_tries': unfair_stats_month[0],
+                      'num_wins': unfair_stats_month[1],
+                      'unfair_score': unfair_stats_month[2]}
+        }
+        winner_dicts.append(winner_dict)
 
     result_url = url_for('views.show_result', result_id=result.id)
-    return jsonify({'winners': winner_names, 'result_id': result.id,
+    return jsonify({'winners': winner_dicts,
+                    'result_id': result.id,
                     'result_url': result_url})
 
 
@@ -90,4 +130,19 @@ def recent_results():
 @bp.route('/result/<int:result_id>')
 def show_result(result_id):
     result = Result.query.get(result_id)
-    return render_template('show_result.html', result=result)
+    unfair_dict = {}
+    winners = [c for c in result.candidates if c.is_winner]
+    for winner in winners:
+        unfair_stats_week = calculate_unfair_score(name=winner.name, days=7)
+        unfair_stats_month = calculate_unfair_score(name=winner.name, days=30)
+        unfair_dict[winner.name] = {
+            'week': {'num_tries': unfair_stats_week[0],
+                     'num_wins': unfair_stats_week[1],
+                     'unfair_score': unfair_stats_week[2]},
+            'month': {'num_tries': unfair_stats_month[0],
+                      'num_wins': unfair_stats_month[1],
+                      'unfair_score': unfair_stats_month[2]}
+        }
+    return render_template('show_result.html',
+                           result=result,
+                           unfair=unfair_dict)

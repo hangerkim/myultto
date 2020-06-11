@@ -11,8 +11,8 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script type="text/javascript"  src="{{ url_for('static', filename='bootstrap-tagsinput.js') }}"></script>
-    <script data-ad-client="pub-7034359309449416" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-tagsinput.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
   </head>
 
   <body>
@@ -117,32 +117,68 @@
         <a href="https://github.com/hangerkim/myultto"><img src="https://simpleicons.org/icons/github.svg" width="24" height="24" alt="Link to the GitHub repository"></a>
       </div>
       <div class="text-center mt-3 mb-3">
-        {% include "ad.html" %}
+        {% include "ad.html" ignore missing %}
       </div>
     </div>
 
     <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="resultModalLabel">결과</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <ul id="winnersList" class="list-group">
-            </ul>
-	    상세 결과: <a id="resultLink"></a><br>
-        {% include "ad.html" %}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-          </div>
-        </div>
-      </div>
     </div>
   </body>
 </html>
+
+<script id="resultModalTemplate" type="text/x-handlebars-template">
+{% raw %}
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resultModalLabel">결과</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          {{#each winners}}
+            <li class="list-group-item">
+              {{name}}
+              <div class="unfair">
+                <table class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">기간</th>
+                      <th scope="col">참여</th>
+                      <th scope="col">당첨</th>
+                      <th scope="col">적폐도</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">최근 7일</th>
+                      <td>{{unfair.week.num_tries}}</td>
+                      <td>{{unfair.week.num_wins}}</td>
+                      <td>{{toFixed unfair.week.unfair_score 4}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">최근 30일</th>
+                      <td>{{unfair.month.num_tries}}</td>
+                      <td>{{unfair.month.num_wins}}</td>
+                      <td>{{toFixed unfair.month.unfair_score 4}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+        상세 결과: <a href="{{result_url}}">{{result_url}}</a><br>
+{% endraw %}
+        {% include "ad.html" ignore missing %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
