@@ -43,7 +43,9 @@ def calculate_unfair_score(name, days):
     score_sum = 0
     for result, candidate in result_candidates:
         if candidate.is_winner:
-            score_sum += len(result.candidates)
+            num_winners = sum(int(c.is_winner) for c in result.candidates)
+            score = len(result.candidates) / num_winners
+            score_sum += score
             num_wins += 1
 
     unfair_score = score_sum / num_tries
