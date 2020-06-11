@@ -14,6 +14,7 @@ class Result(db.Model):
     published_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     candidates = db.relationship('Candidate', backref='result', lazy=False)
     seed = db.Column(db.BigInteger, nullable=False)
+    drawer_ip = db.Column(db.String(128))
 
     @hybrid_property
     def winners(self):

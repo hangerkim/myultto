@@ -62,7 +62,7 @@ def draw_lottery():
     published_at = created_at + timedelta(minutes=announcement_delay)
     seed = int(created_at.timestamp() * 1000)
     result = Result(created_at=created_at, published_at=published_at,
-                    seed=seed)
+                    seed=seed, drawer_ip=request.remote_addr)
     candidates = [Candidate(name=name, result=result) for name in cand_names]
 
     random.seed(seed)

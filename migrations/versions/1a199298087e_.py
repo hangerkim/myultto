@@ -1,4 +1,4 @@
-"""empty message
+"""Add publish delay
 
 Revision ID: 1a199298087e
 Revises:
