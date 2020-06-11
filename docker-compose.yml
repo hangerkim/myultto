@@ -12,8 +12,10 @@ services:
       SQLALCHEMY_DATABASE_URI: "mysql://root@db:3306/myultto"
     volumes:
       - "./instance:/app/instance"
+      - "./app/templates:/app/app/templates:ro"
       - "./certbot_data/conf:/etc/letsencrypt:ro"
       - "./certbot_data/www:/var/www/certbot:ro"
+    restart: always
   db:
     image: mysql:5.7
     container_name: myultto_mysql
@@ -25,6 +27,7 @@ services:
     volumes:
       - "./db_data:/var/lib/mysql"
       - "./conf/mysql:/etc/mysql/conf.d:ro"
+    restart: always
   certbot:
     image: certbot/certbot
     container_name: myultto_certbot
@@ -32,6 +35,7 @@ services:
       - "./certbot_data/conf:/etc/letsencrypt"
       - "./certbot_data/www:/var/www/certbot"
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: always
 
 networks:
   default:
