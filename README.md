@@ -1,4 +1,5 @@
 # Myultto
+This branch will not be updated anymore.
 
 ## How to Run
 1. Edit `docker-compose.yml`, `conf/`, and `init-letsencrypt.sh` if necessary
