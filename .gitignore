@@ -4,3 +4,4 @@
 *.db
 db_data/
 certbot_data/
+app/templates/ad.html
