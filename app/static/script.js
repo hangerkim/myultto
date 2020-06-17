@@ -102,7 +102,3 @@ $('#drawForm').submit(function(e) {
     }
   });
 });
-
-$('.checkbox-hide-statistics').change(function() {
-  console.log('foo');
-});
