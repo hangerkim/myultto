@@ -74,7 +74,6 @@
           </form>
         </div>
       </div>
-
       <div class="card mb-3">
         <h5 class="card-header text-center">
           &#8545;. 추첨
@@ -172,7 +171,9 @@
         </ul>
         상세 결과: <a href="{{result_url}}">{{result_url}}</a><br>
 {% endraw %}
-        {% include "ad.html" ignore missing %}
+        <div class="text-center">
+          {% include "ad.html" ignore missing %}
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
