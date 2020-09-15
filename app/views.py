@@ -45,10 +45,14 @@ def calculate_unfair_score(name, days):
         if candidate.is_winner:
             num_winners = sum(int(c.is_winner) for c in result.candidates)
             score = len(result.candidates) / num_winners
-            score_sum += score
-            num_wins += 1
+            # Wins at 100% lottery will not be counted
+            if len(result.candidates) > num_winners:
+                score_sum += score
+                num_wins += 1
+            else:
+                num_tries -= 1
 
-    unfair_score = score_sum / num_tries
+    unfair_score = score_sum / max(1, num_tries)
 
     return num_tries, num_wins, unfair_score
 
