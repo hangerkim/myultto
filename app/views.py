@@ -101,7 +101,10 @@ def draw_lottery():
     candidates = [Candidate(name=name, result=result) for name in cand_names]
 
     random.seed(seed)
-    winner_indices = random.sample(range(len(cand_names)), num_winners)
+    cand_indices = list(range(len(cand_names)))
+    for _ in range(10):
+        random.shuffle(cand_indices)
+    winner_indices = random.sample(cand_indices, num_winners)
     winners = [candidates[i] for i in winner_indices]
     for winner in winners:
         winner.is_winner = True
