@@ -1,3 +1,4 @@
+import logging
 import os
 import random
 import time
@@ -67,6 +68,9 @@ def extract_candidates():
     json_data = request.get_json()
     article_url = json_data['article_url']
     allow_guest = json_data['allow_guest']
+
+    # TODO: save this info into DB
+    print(article_url)
 
     # UTC
     time_limit = dateutil.parser.parse(json_data['time_limit'])
